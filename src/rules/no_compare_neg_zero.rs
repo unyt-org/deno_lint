@@ -1,5 +1,7 @@
 // Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
+use std::fmt;
+
 use super::{Context, LintRule};
 use crate::handler::{Handler, Traverse};
 use crate::Program;
@@ -23,12 +25,20 @@ enum NoCompareNegZeroMessage {
   Unexpected,
 }
 
-#[derive(Display)]
+// #[derive(Display)]
 enum NoCompareNegZeroHint {
-  #[display(
-    fmt = NoCompareNegZeroHint::ObjectIs
-  )]
+  // #[display(
+  //   fmt = NoCompareNegZeroHint::ObjectIs
+  // )]
   ObjectIs,
+}
+
+// Implement the Display trait for your type
+impl fmt::Display for NoCompareNegZeroHint {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      // Customize how you want to format your type
+      write!(f, "NoCompareNegZeroHint with custom formatting")
+  }
 }
 
 impl LintRule for NoCompareNegZero {

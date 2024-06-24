@@ -422,6 +422,7 @@ impl<'view> Context<'view> {
     message: impl ToString,
     hint: impl ToString,
     fixes: Vec<LintFix>,
+
     severity: LintDiagnosticSeverity
   ) {
     let diagnostic =
@@ -483,7 +484,7 @@ impl<'view> Context<'view> {
       specifier: self.specifier().clone(),
       hint: maybe_hint,
       fixes,
-      // severity: maybe_severity
+      severity: maybe_severity
     };
 
     diagnostic
