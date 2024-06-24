@@ -42,7 +42,7 @@ pub struct LintDiagnostic {
   /// only the first fix will be used for the `--fix` flag, but
   /// multiple will be shown in the LSP.
   pub fixes: Vec<LintFix>,
-  pub severity: Option<LintDiagnosticSeverity>,
+  // pub severity: Option<LintDiagnosticSeverity>,
 }
 
 #[derive(Clone, Debug, Serialize, PartialEq, Eq)]

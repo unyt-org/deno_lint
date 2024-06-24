@@ -483,7 +483,7 @@ impl<'view> Context<'view> {
       specifier: self.specifier().clone(),
       hint: maybe_hint,
       fixes,
-      severity: maybe_severity
+      // severity: maybe_severity
     };
 
     diagnostic
