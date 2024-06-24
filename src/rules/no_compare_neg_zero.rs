@@ -19,10 +19,18 @@ pub struct NoCompareNegZero;
 
 const CODE: &str = "no-compare-neg-zero";
 
-#[derive(Display)]
+// #[derive(Display)]
 enum NoCompareNegZeroMessage {
-  #[display(fmt = NoCompareNegZeroMessage::Unexpected)]
+  // #[display(fmt = NoCompareNegZeroMessage::Unexpected)]
   Unexpected,
+}
+
+// Implement the Display trait for your type
+impl fmt::Display for NoCompareNegZeroMessage {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+      // Customize how you want to format your type
+      write!(f, "NoCompareNegZeroMessage with custom formatting")
+  }
 }
 
 // #[derive(Display)]
