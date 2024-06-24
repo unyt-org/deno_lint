@@ -22,6 +22,7 @@ use deno_ast::{MediaType, ModuleSpecifier};
 use deno_ast::{MultiThreadedComments, Scope};
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use tower_lsp::lsp_types::DiagnosticSeverity;
 
 /// `Context` stores all data needed to perform linting of a particular file.
 pub struct Context<'a> {
@@ -441,6 +442,27 @@ impl<'a> Context<'a> {
     );
   }
 
+  pub fn add_diagnostic_with_severity(
+    &mut self,
+    range: SourceRange,
+    code: impl ToString,
+    message: impl ToString,
+    hint: Option<String>,
+    fixes: Vec<LintFix>,
+    severity: DiagnosticSeverity,
+  ) {
+    self.add_diagnostic_details(
+      Some(self.create_diagnostic_range(range)),
+      self.create_diagnostic_details_all(
+        code,
+        message,
+        hint,
+        fixes,
+        Some(severity),
+      ),
+    );
+  }
+
   pub fn add_diagnostic_details(
     &mut self,
     maybe_range: Option<LintDiagnosticRange>,
@@ -470,6 +492,17 @@ impl<'a> Context<'a> {
     maybe_hint: Option<String>,
     fixes: Vec<LintFix>,
   ) -> LintDiagnosticDetails {
+    self.create_diagnostic_details_all(code, message, maybe_hint, fixes, None)
+  }
+
+  pub(crate) fn create_diagnostic_details_all(
+    &self,
+    code: impl ToString,
+    message: impl ToString,
+    maybe_hint: Option<String>,
+    fixes: Vec<LintFix>,
+    severity: Option<DiagnosticSeverity>,
+  ) -> LintDiagnosticDetails {
     LintDiagnosticDetails {
       message: message.to_string(),
       code: code.to_string(),
@@ -477,6 +510,7 @@ impl<'a> Context<'a> {
       fixes,
       custom_docs_url: None,
       info: vec![],
+      severity,
     }
   }
 
