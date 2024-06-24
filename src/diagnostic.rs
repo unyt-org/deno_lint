@@ -13,6 +13,7 @@ use deno_ast::diagnostics::DiagnosticSourceRange;
 use deno_ast::ModuleSpecifier;
 use deno_ast::SourceRange;
 use deno_ast::SourceTextInfo;
+use serde::Serialize;
 
 #[derive(Debug, Clone)]
 pub struct LintFixChange {
@@ -41,6 +42,16 @@ pub struct LintDiagnostic {
   /// only the first fix will be used for the `--fix` flag, but
   /// multiple will be shown in the LSP.
   pub fixes: Vec<LintFix>,
+  pub severity: Option<LintDiagnosticSeverity>,
+}
+
+#[derive(Clone, Debug, Serialize, PartialEq, Eq)]
+#[repr(u8)]
+pub enum LintDiagnosticSeverity {
+  ERROR = 1,
+  WARNING = 2,
+  INFORMATION = 3,
+  HINT = 4
 }
 
 impl Diagnostic for LintDiagnostic {

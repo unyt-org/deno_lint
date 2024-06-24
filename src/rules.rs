@@ -5,6 +5,7 @@ use crate::Program;
 use crate::ProgramRef;
 use std::cmp::Ordering;
 use std::collections::HashSet;
+use crate::rules::uix_rules::require_use_declarations;
 
 pub mod adjacent_overload_signatures;
 pub mod ban_ts_comment;
@@ -109,6 +110,7 @@ pub mod triple_slash_reference;
 pub mod use_isnan;
 pub mod valid_typeof;
 pub mod verbatim_module_syntax;
+pub mod uix_rules;
 
 pub trait LintRule: std::fmt::Debug + Send + Sync {
   /// Executes lint using `dprint-swc-ecma-ast-view`.
@@ -334,6 +336,7 @@ fn get_all_rules_raw() -> Vec<&'static dyn LintRule> {
     &use_isnan::UseIsNaN,
     &valid_typeof::ValidTypeof,
     &verbatim_module_syntax::VerbatimModuleSyntax,
+    &require_use_declarations::RequireUseDeclarations,
   ]
 }
 

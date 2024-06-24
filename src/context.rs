@@ -1,7 +1,7 @@
 // Copyright 2018-2024 the Deno authors. All rights reserved. MIT license.
 
 use crate::control_flow::ControlFlow;
-use crate::diagnostic::{LintDiagnostic, LintFix};
+use crate::diagnostic::{LintDiagnostic, LintFix, LintDiagnosticSeverity};
 use crate::ignore_directives::{
   parse_line_ignore_directives, CodeStatus, FileIgnoreDirective,
   LineIgnoreDirective,
@@ -415,6 +415,21 @@ impl<'view> Context<'view> {
     self.diagnostics.push(diagnostic);
   }
 
+  pub fn add_diagnostic_with_hint_and_severity(
+    &mut self,
+    range: SourceRange,
+    code: impl ToString,
+    message: impl ToString,
+    hint: impl ToString,
+    fixes: Vec<LintFix>,
+    severity: LintDiagnosticSeverity
+  ) {
+    let diagnostic =
+      self.create_diagnostic_with_severity(range, code, message, Some(hint.to_string()),fixes, Some(severity));
+    self.diagnostics.push(diagnostic);
+  }
+
+
   pub(crate) fn create_diagnostic(
     &self,
     range: SourceRange,
@@ -423,17 +438,64 @@ impl<'view> Context<'view> {
     maybe_hint: Option<String>,
     fixes: Vec<LintFix>,
   ) -> LintDiagnostic {
-    LintDiagnostic {
-      specifier: self.specifier().clone(),
+    // LintDiagnostic {
+    //   specifier: self.specifier().clone(),
+    //   range,
+    //   text_info: self.text_info().clone(),
+    //   message: message.to_string(),
+    //   code: code.to_string(),
+    //   hint: maybe_hint,
+    //   fixes,
+    // }
+    self.create_diagnostic_with_severity(
       range,
-      text_info: self.text_info().clone(),
+      code,
+      message,
+      maybe_hint,
+      fixes,
+      None
+    )
+  }
+
+  pub(crate) fn create_diagnostic_with_severity(
+    &self,
+    range: SourceRange,
+    code: impl ToString,
+    message: impl ToString,
+    maybe_hint: Option<String>,
+    fixes: Vec<LintFix>,
+    maybe_severity: Option<LintDiagnosticSeverity>
+  ) -> LintDiagnostic {
+    let text_info = self.text_info();
+    // let start = Position::new(
+    //   range.start.as_byte_index(text_info.range().start),
+    //   text_info.line_and_column_index(range.start),
+    // );
+    // let end = Position::new(
+    //   range.end.as_byte_index(text_info.range().start),
+    //   text_info.line_and_column_index(range.end),
+    // );
+    let diagnostic = LintDiagnostic {
+      range,
       message: message.to_string(),
+      text_info: text_info.clone(),
       code: code.to_string(),
+      specifier: self.specifier().clone(),
       hint: maybe_hint,
       fixes,
-    }
+      severity: maybe_severity
+    };
+
+    diagnostic
   }
+
 }
+
+
+
+
+
+
 
 /// A struct containing a boolean value to control whether a node's children
 /// will be traversed or not.
