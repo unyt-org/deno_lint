@@ -67,7 +67,11 @@ pub struct LintDiagnostic {
 
 impl Diagnostic for LintDiagnostic {
   fn level(&self) -> DiagnosticLevel {
-    <Option<DiagnosticLevel> as Clone>::clone(&self.details.severity).unwrap_or(DiagnosticLevel::Error)
+    self
+      .details
+      .severity
+      .clone()
+      .unwrap_or(DiagnosticLevel::Error)
   }
 
   fn code(&self) -> Cow<'_, str> {

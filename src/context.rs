@@ -10,6 +10,7 @@ use crate::ignore_directives::{
 };
 use crate::linter::LinterContext;
 use crate::rules::{self, LintRule};
+use deno_ast::diagnostics::DiagnosticLevel;
 use deno_ast::swc::ast::Expr;
 use deno_ast::swc::common::comments::Comment;
 use deno_ast::swc::common::util::take::Take;
@@ -22,7 +23,6 @@ use deno_ast::{MediaType, ModuleSpecifier};
 use deno_ast::{MultiThreadedComments, Scope};
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use deno_ast::diagnostics::DiagnosticLevel;
 
 /// `Context` stores all data needed to perform linting of a particular file.
 pub struct Context<'a> {
