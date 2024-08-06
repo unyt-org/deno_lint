@@ -4,6 +4,7 @@ use std::collections::HashSet;
 use super::super::{Context, LintRule};
 use crate::handler::{Handler, Traverse};
 use crate::Program;
+use deno_ast::diagnostics::DiagnosticLevel;
 use deno_ast::swc::ast::Id;
 use deno_ast::view::{
   BlockStmt, BlockStmtOrExpr, Callee, Expr, JSXAttrName, JSXAttrValue, JSXExpr,
@@ -147,7 +148,7 @@ impl Handler for FindVariablesHandler {
       MESSAGE,
       Some(HINT.to_string()),
       fixes,
-      DiagnosticSeverity::ERROR,
+      DiagnosticLevel::Error,
     );
   }
 }

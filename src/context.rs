@@ -22,7 +22,7 @@ use deno_ast::{MediaType, ModuleSpecifier};
 use deno_ast::{MultiThreadedComments, Scope};
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use tower_lsp::lsp_types::DiagnosticSeverity;
+use deno_ast::diagnostics::DiagnosticLevel;
 
 /// `Context` stores all data needed to perform linting of a particular file.
 pub struct Context<'a> {
@@ -449,7 +449,7 @@ impl<'a> Context<'a> {
     message: impl ToString,
     hint: Option<String>,
     fixes: Vec<LintFix>,
-    severity: DiagnosticSeverity,
+    severity: DiagnosticLevel,
   ) {
     self.add_diagnostic_details(
       Some(self.create_diagnostic_range(range)),
@@ -501,7 +501,7 @@ impl<'a> Context<'a> {
     message: impl ToString,
     maybe_hint: Option<String>,
     fixes: Vec<LintFix>,
-    severity: Option<DiagnosticSeverity>,
+    severity: Option<DiagnosticLevel>,
   ) -> LintDiagnosticDetails {
     LintDiagnosticDetails {
       message: message.to_string(),

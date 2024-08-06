@@ -13,7 +13,6 @@ use deno_ast::diagnostics::DiagnosticSourceRange;
 use deno_ast::ModuleSpecifier;
 use deno_ast::SourceRange;
 use deno_ast::SourceTextInfo;
-use tower_lsp::lsp_types::DiagnosticSeverity;
 
 #[derive(Debug, Clone)]
 pub struct LintFixChange {
@@ -52,7 +51,7 @@ pub struct LintDiagnosticDetails {
   pub custom_docs_url: Option<String>,
   /// Displays additional information at the end of a diagnostic.
   pub info: Vec<Cow<'static, str>>,
-  pub severity: Option<DiagnosticSeverity>,
+  pub severity: Option<DiagnosticLevel>,
 }
 
 #[derive(Clone)]
@@ -68,7 +67,7 @@ pub struct LintDiagnostic {
 
 impl Diagnostic for LintDiagnostic {
   fn level(&self) -> DiagnosticLevel {
-    DiagnosticLevel::Error
+    <Option<DiagnosticLevel> as Clone>::clone(&self.details.severity).unwrap_or(DiagnosticLevel::Error)
   }
 
   fn code(&self) -> Cow<'_, str> {
