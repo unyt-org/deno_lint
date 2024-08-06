@@ -11,7 +11,6 @@ use deno_ast::view::{
   NodeTrait,
 };
 use deno_ast::SourceRanged;
-use tower_lsp::lsp_types::DiagnosticSeverity;
 
 #[derive(Debug)]
 pub struct RequireUseDeclarations;
