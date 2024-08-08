@@ -71,7 +71,7 @@ impl Diagnostic for LintDiagnostic {
       .details
       .severity
       .clone()
-      .unwrap_or(DiagnosticLevel::Warning)
+      .unwrap_or(DiagnosticLevel::Error)
   }
 
   fn code(&self) -> Cow<'_, str> {
