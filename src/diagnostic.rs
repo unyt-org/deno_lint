@@ -59,6 +59,7 @@ pub struct LintDiagnosticDetails {
   pub custom_docs_url: LintDocsUrl,
   /// Displays additional information at the end of a diagnostic.
   pub info: Vec<Cow<'static, str>>,
+  pub severity: Option<DiagnosticLevel>,
 }
 
 #[derive(Clone)]
@@ -74,7 +75,11 @@ pub struct LintDiagnostic {
 
 impl Diagnostic for LintDiagnostic {
   fn level(&self) -> DiagnosticLevel {
-    DiagnosticLevel::Error
+    self
+      .details
+      .severity
+      .clone()
+      .unwrap_or(DiagnosticLevel::Error)
   }
 
   fn code(&self) -> Cow<'_, str> {
