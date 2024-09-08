@@ -10,6 +10,7 @@ use crate::ignore_directives::{
 };
 use crate::linter::LinterContext;
 use crate::rules::{self, LintRule};
+use deno_ast::diagnostics::DiagnosticLevel;
 use deno_ast::swc::ast::Expr;
 use deno_ast::swc::common::comments::Comment;
 use deno_ast::swc::common::util::take::Take;
@@ -441,6 +442,27 @@ impl<'a> Context<'a> {
     );
   }
 
+  pub fn add_diagnostic_with_severity(
+    &mut self,
+    range: SourceRange,
+    code: impl ToString,
+    message: impl ToString,
+    hint: Option<String>,
+    fixes: Vec<LintFix>,
+    severity: DiagnosticLevel,
+  ) {
+    self.add_diagnostic_details(
+      Some(self.create_diagnostic_range(range)),
+      self.create_diagnostic_details_all(
+        code,
+        message,
+        hint,
+        fixes,
+        Some(severity),
+      ),
+    );
+  }
+
   pub fn add_diagnostic_details(
     &mut self,
     maybe_range: Option<LintDiagnosticRange>,
@@ -470,6 +492,17 @@ impl<'a> Context<'a> {
     maybe_hint: Option<String>,
     fixes: Vec<LintFix>,
   ) -> LintDiagnosticDetails {
+    self.create_diagnostic_details_all(code, message, maybe_hint, fixes, None)
+  }
+
+  pub(crate) fn create_diagnostic_details_all(
+    &self,
+    code: impl ToString,
+    message: impl ToString,
+    maybe_hint: Option<String>,
+    fixes: Vec<LintFix>,
+    severity: Option<DiagnosticLevel>,
+  ) -> LintDiagnosticDetails {
     LintDiagnosticDetails {
       message: message.to_string(),
       code: code.to_string(),
@@ -477,8 +510,10 @@ impl<'a> Context<'a> {
       fixes,
       custom_docs_url: None,
       info: vec![],
+      severity,
     }
   }
+
 
   pub(crate) fn create_diagnostic_range(
     &self,
