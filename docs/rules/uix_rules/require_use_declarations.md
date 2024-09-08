@@ -1,0 +1,1 @@
+Requires use declarations for all transferable closures.
