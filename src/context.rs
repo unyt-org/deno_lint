@@ -526,7 +526,6 @@ impl<'a> Context<'a> {
     }
   }
 
-
   pub(crate) fn create_diagnostic_range(
     &self,
     range: SourceRange,

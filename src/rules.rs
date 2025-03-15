@@ -125,10 +125,10 @@ pub mod require_await;
 pub mod require_yield;
 pub mod single_var_declarator;
 pub mod triple_slash_reference;
+pub mod uix_rules;
 pub mod use_isnan;
 pub mod valid_typeof;
 pub mod verbatim_module_syntax;
-pub mod uix_rules;
 
 pub trait LintRule: std::fmt::Debug + Send + Sync {
   /// Executes lint using `dprint-swc-ecma-ast-view`.
