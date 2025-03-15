@@ -3,11 +3,12 @@ use std::collections::HashSet;
 // Copyright 2023 unyt.org
 use super::super::{Context, LintRule};
 use crate::handler::{Handler, Traverse};
-use crate::Program;
+use crate::{tags, Program};
 use deno_ast::diagnostics::DiagnosticLevel;
 use deno_ast::swc::ast::Id;
 use deno_ast::view::{
-  BlockStmt, BlockStmtOrExpr, Callee, Expr, JSXAttrName, JSXAttrValue, JSXExpr, Node, NodeTrait
+  BlockStmt, BlockStmtOrExpr, Callee, Expr, JSXAttrName, JSXAttrValue, JSXExpr,
+  Node, NodeTrait,
 };
 use deno_ast::SourceRanged;
 
@@ -21,8 +22,8 @@ const HINT: &str =
   "Put all external variables used inside this closure in a use() declaration at the start of the closure";
 
 impl LintRule for RequireUseDeclarations {
-  fn tags(&self) -> &'static [&'static str] {
-    &["recommended"]
+  fn tags(&self) -> &'static [tags::Tag] {
+    &[tags::RECOMMENDED]
   }
 
   fn code(&self) -> &'static str {
@@ -35,11 +36,6 @@ impl LintRule for RequireUseDeclarations {
     program: Program,
   ) {
     RequireUseDeclarationsHandler.traverse(program, context);
-  }
-
-  #[cfg(feature = "docs")]
-  fn docs(&self) -> &'static str {
-    include_str!("../../../docs/rules/uix_rules/require_use_declarations.md")
   }
 }
 
@@ -98,11 +94,13 @@ impl Handler for RequireUseDeclarationsHandler {
   //     _n.kind()
   // }
 
-  fn arrow_expr(&mut self, expr: &deno_ast::view::ArrowExpr, context: &mut Context) {
-
+  fn arrow_expr(
+    &mut self,
+    expr: &deno_ast::view::ArrowExpr,
+    context: &mut Context,
+  ) {
     // iterate ancestors and check if the arrow function is callback of a "run" function
     for ancestor in expr.ancestors() {
-
       match ancestor {
         Node::CallExpr(call_expr) => {
           match call_expr.callee {
@@ -125,9 +123,7 @@ impl Handler for RequireUseDeclarationsHandler {
         }
         _ => {}
       }
-
     }
-
   }
 }
 
