@@ -309,8 +309,8 @@ checksum = "5c297a1c74b71ae29df00c3e22dd9534821d60eb9af5a0192823fa2acea70c2a"
 
 [[package]]
 name = "deno_ast"
-version = "0.46.4"
-source = "git+https://github.com/unyt-org/deno_ast.git#457ad6afb656f8575e19f0705d13eff5a2290b17"
+version = "0.46.2"
+source = "git+https://github.com/unyt-org/deno_ast.git#fca682fefe76d436445486cb68a93e0423a633c7"
 dependencies = [
  "deno_error",
  "deno_media_type",
